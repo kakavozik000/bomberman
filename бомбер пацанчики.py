@@ -3,7 +3,11 @@ import arcade
 
 SCREEN_WIDTH = 1400
 SCREEN_HEIGHT = 720
-SCREEN_TITLE = "Arcade Game"
+SCREEN_TITLE = "Бомбермания"
+ROW = 20
+COLUMN =50
+BLOCK_WIDTH = 50
+BLOCK_HEIGHT = 50
 
 
 
@@ -16,8 +20,13 @@ class Boba(arcade.Sprite):
         self.timer = time.time()
     def update(self):
         if time.time() - self.timer >= 5:
-            window.Boa.center_x = self.center_x
-            window.Boa.center_y = self.center_y
+            self.kill()
+
+            boa = Boa()
+            boa.center_x = self.center_x
+            boa.center_y = self.center_y
+            window.ogok.append(boa)
+
 
 class Boa(arcade.Sprite):
 
@@ -25,10 +34,11 @@ class Boa(arcade.Sprite):
         super().__init__("Boa.png", scale=1)
         self.center_x = 1200
         self.center_y = SCREEN_HEIGHT / 3
+        self.timer = time.time()
     def update(self):
-        if time.time() - self.timer >= 5:
-            self.center_x += self.change_x
-            self.center_y += self.change_y
+        if time.time() - self.timer >= 3:
+            self.kill()
+
 
 
 
@@ -38,9 +48,15 @@ class Bobo(arcade.Sprite):
         super().__init__("Bo.png", scale=0.2)
         self.center_x = 1200
         self.center_y = SCREEN_HEIGHT / 3
+        self.timer = time.time()
     def update(self):
-        self.center_x += self.change_x
-        self.center_y += self.change_y
+        if time.time() - self.timer >= 5:
+            self.kill()
+
+            boa = Boa()
+            boa.center_x = self.center_x
+            boa.center_y = self.center_y
+            window.ogot.append(boa)
 
 
 
@@ -89,10 +105,14 @@ class Game(arcade.Window):
         self.Tai = Tailand()
         self.set_mouse_visible(False)
         self.fu = arcade.load_texture("Fo.png")
-        self.Boba = None
-        self.Bobo = None
-        self.Boa = Boa()
-        self.Boa.center_x = 10000
+        self.bumibut = arcade.SpriteList()
+        self.bumibuk = arcade.SpriteList()
+        self.ogot = arcade.SpriteList()
+        self.ogok = arcade.SpriteList()
+        self.fonch = arcade.SpriteList()
+        self.bd = arcade.SpriteList()
+        self.bn = arcade.SpriteList()
+
 
     def on_key_press(self, symbol: int, modifiers: int):
         if symbol == arcade.key.TAB:
@@ -105,10 +125,14 @@ class Game(arcade.Window):
             self.Kam.change_y = 10
         if symbol == arcade.key.DOWN:
             self.Kam.change_y = -10
+
         if symbol == arcade.key.SPACE:
-            self.Boba = Boba()
-            self.Boba.center_x = self.Kam.center_x
-            self.Boba.center_y = self.Kam.center_y
+            boba = Boba()
+            boba.center_x = self.Kam.center_x
+            boba.center_y = self.Kam.center_y
+            self.bumibuk.append(boba)
+
+
 
         if symbol == arcade.key.R:
             self.Tai.change_x = 10
@@ -119,9 +143,10 @@ class Game(arcade.Window):
         if symbol == arcade.key.D:
             self.Tai.change_y = -10
         if symbol == arcade.key.F10 :
-            self.Bobo = Bobo()
-            self.Bobo.center_x = self.Tai.center_x
-            self.Bobo.center_y = self.Tai.center_y
+            boba = Boba()
+            boba.center_x = self.Tai.center_x
+            boba.center_y = self.Tai.center_y
+            self.bumibut.append(boba)
 
 
 
@@ -151,28 +176,33 @@ class Game(arcade.Window):
         self.Tai.draw()
         arcade.draw_text("Выход = taб,Управление персонажами через стрелочки", 100, 100,
         arcade.color.AMERICAN_ROSE, 30)
-        if self.Boba is not None:
-            self.Boba.draw()
-        if self.Bobo is not None:
-            self.Bobo.draw()
-        self.Boa.draw()
+        self.bumibut.draw()
+        self.bumibuk.draw()
+        self.ogot.draw()
+        self.ogok.draw()
+        self.fonch.draw()
+        self.bd.draw()
+        self.bn.draw()
+
 
 
     def on_update(self, delta_time: float):
         self.Kam.update()
         self.Tai.update()
-        if self.Boba is not None:
-            self.Boba.update()
+        self.bumibut.update()
+        self.bumibuk.update()
+        self.ogot.update()
+        self.ogok.update()
 
 window = Game()
 arcade.run()
 
 """
-1. Сделать возможность взрываться бомбочке и второого игроку (точно также всё скопировать из первого БОА) оки
-2. Картинку "грустного" Тайланда оки
-3. Поиграть в БЛ ок
-4. лазщэыокушпхыг ага аг,аписываю
-5. реагкенгс окей,что дальше?
- картинками (бомбочкеи пропали, попробовать сохранить в другом формате в ибисе)
+1. Узнать как выключить компудатор на питоне, нужен маленький кодик (две строчки) и если его запустить, то
+компухтер выключится. Если человек нажало на кномпу ентер, то вырубить ПК
 
+2. В окне просто отрисовать несколько надписей (хпшки первого игрока и второого)
+3. Погулять сегодня
+4. Найти звуки для взрыва и можно на задний фон (по желанию), звуки ходьбы (по желнию)
+Звуик НЕ СКАЧИВАТЬ БЕЗ ПАШТЕТА,сделаем это вместе :))
 """
