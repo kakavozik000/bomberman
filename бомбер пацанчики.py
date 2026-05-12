@@ -1,14 +1,14 @@
 import time
 import arcade
 
-SCREEN_WIDTH = 1400
-SCREEN_HEIGHT = 720
+
 SCREEN_TITLE = "Бомбермания"
 ROW = 20
-COLUMN =50
+COLUMN = 25
 BLOCK_WIDTH = 50
 BLOCK_HEIGHT = 50
-
+SCREEN_WIDTH = COLUMN * BLOCK_WIDTH
+SCREEN_HEIGHT = ROW * BLOCK_HEIGHT
 
 
 class Boba(arcade.Sprite):
@@ -100,11 +100,11 @@ class Tailand (arcade.Sprite):
 
 class Game(arcade.Window):
     def __init__(self):
-        super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE,fullscreen=True)
+        super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE,fullscreen=False)
         self.Kam = Kambodsha()
         self.Tai = Tailand()
         self.set_mouse_visible(False)
-        self.fu = arcade.load_texture("Fo.png")
+        self.fu = arcade.load_texture("фончпек.png")
         self.bumibut = arcade.SpriteList()
         self.bumibuk = arcade.SpriteList()
         self.ogot = arcade.SpriteList()
@@ -172,12 +172,14 @@ class Game(arcade.Window):
 
     def on_draw(self):
         self.clear()
-        arcade.draw_texture_rectangle(self.width / 2, self.height / 2, self.width, self.height,self.fu)
+        for y in range(ROW):
+            for x in range(COLUMN):
+                arcade.draw_texture_rectangle(x * BLOCK_WIDTH +BLOCK_WIDTH/2, y * BLOCK_HEIGHT+BLOCK_HEIGHT/2, BLOCK_WIDTH, BLOCK_HEIGHT,self.fu)
         self.Kam.draw()
         self.Tai.draw()
         arcade.draw_text("Выход = taб,Управление Фиолетовой чучундрой через стрелочки,рыжей - urld", 100, 100,
         arcade.color.AMERICAN_ROSE, 30)
-        arcade.draw_text("у всех по 2 хпхе", 00, 100,
+        arcade.draw_text("у всех по 2 хпхе", 200, 400,
         arcade.color.AMERICAN_ROSE, 30)
         self.bumibut.draw()
         self.bumibuk.draw()
@@ -201,16 +203,25 @@ window = Game()
 arcade.run()
 
 """
+
+
+2. В окне просто отрисовать несколько надписей (хпшки первого игрока и второого) оки
+3. Погулять сегодня оки 
+4. Найти звуки для взрыва и можно на задний фон (по желанию), звуки ходьбы (по желнию)
+Звуик НЕ СКАЧИВАТЬ БЕЗ ПАШТЕ
+
 1. Узнать как выключить компудатор на питоне, нужен маленький кодик (две строчки) и если его запустить, то
 компухтер выключится. Если человек нажало на кномпу ентер, то вырубить ПК
 
  if symbol == arcade.key.ENTER:
     self.close()
 
-тадаам
-
-2. В окне просто отрисовать несколько надписей (хпшки первого игрока и второого) оки
-3. Погулять сегодня оки 
-4. Найти звуки для взрыва и можно на задний фон (по желанию), звуки ходьбы (по желнию)
-Звуик НЕ СКАЧИВАТЬ БЕЗ ПАШТЕТА,сделаем это вместе :)) оке
+тадаамТА,сделаем это вместе :)) оке
+-------------------------------
+Погулять
+1. По нажатию кнопки - выключать Пк
+2. Нам нужны три буста, которые будут лежать на полу (пол рисовать не надо, только сам буст)
+Бусты: для скорости, для бомбчек (кол-во их увеличивается), для невидимости, для увеличения кол-во огней
+ нарисовать как угодно, например, в виде бутылочек (и  на них там будет нарисовано что-то ) или другой какой-то пример
+ 
 """
