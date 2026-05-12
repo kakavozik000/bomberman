@@ -134,6 +134,7 @@ class Game(arcade.Window):
 
 
 
+
         if symbol == arcade.key.R:
             self.Tai.change_x = 10
         if symbol == arcade.key.L:
@@ -174,7 +175,9 @@ class Game(arcade.Window):
         arcade.draw_texture_rectangle(self.width / 2, self.height / 2, self.width, self.height,self.fu)
         self.Kam.draw()
         self.Tai.draw()
-        arcade.draw_text("Выход = taб,Управление персонажами через стрелочки", 100, 100,
+        arcade.draw_text("Выход = taб,Управление Фиолетовой чучундрой через стрелочки,рыжей - urld", 100, 100,
+        arcade.color.AMERICAN_ROSE, 30)
+        arcade.draw_text("у всех по 2 хпхе", 00, 100,
         arcade.color.AMERICAN_ROSE, 30)
         self.bumibut.draw()
         self.bumibuk.draw()
@@ -201,8 +204,13 @@ arcade.run()
 1. Узнать как выключить компудатор на питоне, нужен маленький кодик (две строчки) и если его запустить, то
 компухтер выключится. Если человек нажало на кномпу ентер, то вырубить ПК
 
-2. В окне просто отрисовать несколько надписей (хпшки первого игрока и второого)
-3. Погулять сегодня
+ if symbol == arcade.key.ENTER:
+    self.close()
+
+тадаам
+
+2. В окне просто отрисовать несколько надписей (хпшки первого игрока и второого) оки
+3. Погулять сегодня оки 
 4. Найти звуки для взрыва и можно на задний фон (по желанию), звуки ходьбы (по желнию)
-Звуик НЕ СКАЧИВАТЬ БЕЗ ПАШТЕТА,сделаем это вместе :))
+Звуик НЕ СКАЧИВАТЬ БЕЗ ПАШТЕТА,сделаем это вместе :)) оке
 """
