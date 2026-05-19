@@ -1,3 +1,4 @@
+import random
 import time
 import arcade
 
@@ -14,7 +15,7 @@ SCREEN_HEIGHT = ROW * BLOCK_HEIGHT
 class Boba(arcade.Sprite):
 
     def __init__(self):
-        super().__init__("Bo.png", scale=0.2)
+        super().__init__("Bo.png", scale=2)
         self.center_x = 1200
         self.center_y = SCREEN_HEIGHT / 3
         self.timer = time.time()
@@ -45,7 +46,7 @@ class Boa(arcade.Sprite):
 class Bobo(arcade.Sprite):
 
     def __init__(self):
-        super().__init__("Bo.png", scale=0.2)
+        super().__init__("Bo.png", scale=2)
         self.center_x = 1200
         self.center_y = SCREEN_HEIGHT / 3
         self.timer = time.time()
@@ -59,7 +60,10 @@ class Bobo(arcade.Sprite):
             window.ogot.append(boa)
 
 
+class Baba (arcade.Sprite):
 
+    def __init__(self):
+        super().__init__('блокда.png', scale=2)
 
 
 
@@ -84,6 +88,14 @@ class Kambodsha (arcade.Sprite):
     def update(self):
         self.center_x += self.change_x
         self.center_y += self.change_y
+        if self.right > SCREEN_WIDTH:
+            self.right = SCREEN_WIDTH
+        if self.left < 0:
+            self.left = 0
+        if self.top > SCREEN_HEIGHT:
+            self.top = SCREEN_HEIGHT
+        if self.bottom < 0:
+            self.bottom = 0
 
 
 class Tailand (arcade.Sprite):
@@ -95,6 +107,15 @@ class Tailand (arcade.Sprite):
     def update(self):
         self.center_x += self.change_x
         self.center_y += self.change_y
+        if self.right > SCREEN_WIDTH:
+            self.right = SCREEN_WIDTH
+        if self.left < 0:
+            self.left = 0
+        if self.top > SCREEN_HEIGHT:
+            self.top = SCREEN_HEIGHT
+        if self.bottom < 0:
+            self.bottom = 0
+
 
 
 
@@ -114,19 +135,73 @@ class Game(arcade.Window):
         self.ogok = arcade.SpriteList()
         self.bd = arcade.SpriteList()
         self.bn = arcade.SpriteList()
+        self.generate_map()
 
+
+
+
+
+
+
+        # with open("chupep.txt", "r", encoding="utf-8") as file:
+        #     for line in file:
+        #         x, y = line.strip().split(",")
+        #         block = Nelomoka()
+        #         block.center_x = float(x)
+        #         block.center_y = float(y)
+        #         self.bn.append(block)
+
+    def generate_map(self):
+        for y in range(ROW):
+            for x in range(COLUMN):
+                mon = random.randint(0, 7)
+                if mon == 0:
+                    block = Baba()
+                    block.center_x = x * BLOCK_WIDTH + BLOCK_WIDTH // 2
+                    block.center_y = y * BLOCK_HEIGHT + BLOCK_HEIGHT // 2
+                    self.bd.append(block)
+                if mon == 1:
+                    block = Nelomoka()
+                    block.center_x = x * BLOCK_WIDTH + BLOCK_WIDTH // 2
+                    block.center_y = y * BLOCK_HEIGHT + BLOCK_HEIGHT // 2
+                    self.bn.append(block)
+                if mon == 2:
+                    block = Nelomoka()
+                    block.center_x = x * BLOCK_WIDTH + BLOCK_WIDTH // 2
+                    block.center_y = y * BLOCK_HEIGHT + BLOCK_HEIGHT // 2
+                    self.bn.append(block)
+
+    def on_close(self):
+        with open("chupep.txt", "w", encoding="utf-8") as file:
+            for block in self.bn:
+                file.write(f"{block.center_x}, {block.center_y}\n")
+
+
+
+
+        self.close()
     def on_mouse_press(self, x: int, y: int, button: int, modifiers: int):
-        kletochka_index_x = x // BLOCK_WIDTH
-        kletochka_index_y = y // BLOCK_HEIGHT
-        kletochka_center_x = kletochka_index_x * BLOCK_WIDTH + BLOCK_WIDTH // 2
-        kletochka_center_y = kletochka_index_y * BLOCK_HEIGHT + BLOCK_HEIGHT // 2
+        if button == arcade.MOUSE_BUTTON_LEFT:
+            kletochka_index_x = x // BLOCK_WIDTH
+            kletochka_index_y = y // BLOCK_HEIGHT
+            kletochka_center_x = kletochka_index_x * BLOCK_WIDTH + BLOCK_WIDTH // 2
+            kletochka_center_y = kletochka_index_y * BLOCK_HEIGHT + BLOCK_HEIGHT // 2
 
-        print(kletochka_index_x,kletochka_index_y,kletochka_center_x,kletochka_center_y)
+            print(kletochka_index_x,kletochka_index_y,kletochka_center_x,kletochka_center_y)
 
-        pup = Nelomoka()
-        pup.center_x = kletochka_center_x
-        pup.center_y = kletochka_center_y
-        self.bn.append(pup)
+            pup = Nelomoka()
+            pup.center_x = kletochka_center_x
+            pup.center_y = kletochka_center_y
+            self.bn.append(pup)
+        if button == arcade.MOUSE_BUTTON_RIGHT:
+            for sprite in self.bn[:]:
+                if sprite.collides_with_point((x, y)):
+                    self.bn.remove(sprite)
+                    sprite.remove_from_sprite_lists()
+                    break
+        if button == arcade.MOUSE_BUTTON_MIDDLE:
+            self.bd.clear()
+            self.bn.clear()
 
 
     def on_key_press(self, symbol: int, modifiers: int):
@@ -141,6 +216,12 @@ class Game(arcade.Window):
         if symbol == arcade.key.DOWN:
             self.Kam.change_y = -10
 
+        if symbol == arcade.key.BACKSPACE:
+            self.bn.clear()
+            self.bd.clear()
+            self.generate_map()
+
+
         if symbol == arcade.key.SPACE:
             boba = Boba()
             boba.center_x = self.Kam.center_x
@@ -153,7 +234,7 @@ class Game(arcade.Window):
         if symbol == arcade.key.R:
             self.Tai.change_x = 10
         if symbol == arcade.key.L:
-            self.Tai.change_x = -0
+            self.Tai.change_x = -11
         if symbol == arcade.key.U:
             self.Tai.change_y = 10
         if symbol == arcade.key.D:
@@ -218,33 +299,7 @@ window = Game()
 arcade.run()
 
 """
-
-Звуик НЕ СКАЧИВАТЬ БЕЗ ПАШТЕ
-
-1. Узнать как выключить компудатор на питоне, нужен маленький кодик (две строчки) и если его запустить, то
-компухтер выключится. Если человек нажало на кномпу ентер, то вырубить ПК
- if symbol == arcade.key.ENTER:
-    self.close()
-
-ТА,сделаем это вместе :)) оке
--------------------------------
-Погулять
-1. По нажатию кнопки - выключать Пк
-2. Нам нужны три буста, которые будут лежать на полу (пол рисовать не надо, только сам буст)
-Бусты: для скорости, для бомбчек (кол-во их увеличивается), для невидимости, для увеличения кол-во огней
- нарисовать как угодно, например, в виде бутылочек (и  на них там будет нарисовано что-то ) или другой какой-то пример
- 
- 
- 
- 
- 
-  self.fonch = arcade.SpriteList()
-  
-import  os
-os.system("shutdown /s /t 0")
- 
- -------------------------
- 1. когда мы ставим бомбочку - изменить её размер, чтобы она соответствовала одной клеточке + огонь тоже скейл поменять
- 2. сделать так, чтобы игроки не могли выйти за пределы окна (уже делали раньше, подсмотри в прошлые проектики :))
- 3. сделать так, чтобы при нажатии на кнопочку ентер - просто выключался компьютер :)
+1. Поиграться немного с генеракцией карты
+2. Когда мы ставим бомбочку (исправить размер) + сделать так, чтобы возле нашего огня (тоже изменить ему размер) рядом появился ещё один огонёк
+3. Огни у нас должны будут расходиться в виде креста (в левую сторону, в правую сторону, вверх и вниз)
 """
